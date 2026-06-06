@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XARXES LOCALS · Mòdul 0225 · Estudi</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b10;
+    --bg2: #0d1117;
+    --bg3: #111820;
+    --accent: #00f5c4;
+    --accent2: #f5a623;
+    --accent3: #e040fb;
+    --red: #ff4560;
+    --text: #c9d1d9;
+    --text2: #8b949e;
+    --border: rgba(0,245,196,0.15);
+    --card: rgba(13,17,23,0.9);
+    --glow: 0 0 20px rgba(0,245,196,0.3);
+    --glow2: 0 0 20px rgba(240,166,35,0.3);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ANIMATED GRID BACKGROUND */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(0,245,196,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,196,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* HEADER */
+  header {
+    position:relative;
+    z-index:10;
+    padding: 40px 40px 20px;
+    border-bottom: 1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+
+  .logo-area { display:flex; flex-direction:column; }
+
+  .logo-tag {
+    font-size:11px;
+    color: var(--accent);
+    letter-spacing:4px;
+    text-transform:uppercase;
+    margin-bottom:6px;
+    font-weight:400;
+  }
+
+  h1 {
+    font-family:'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight:800;
+    line-height:1;
+    color:#fff;
+    letter-spacing:-2px;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .badge {
+    background: rgba(0,245,196,0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 6px 14px;
+    font-size:12px;
+    letter-spacing:2px;
+    animation: pulse-border 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-border {
+    0%,100% { box-shadow: 0 0 0 rgba(0,245,196,0.3); }
+    50% { box-shadow: 0 0 15px rgba(0,245,196,0.3); }
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8,11,16,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display:flex;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  nav::-webkit-scrollbar { display:none; }
+
+  .nav-btn {
+    background:none;
+    border:none;
+    color: var(--text2);
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:1px;
+    padding: 16px 20px;
+    cursor:pointer;
+    white-space:nowrap;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+    position:relative;
+  }
+
+  .nav-btn:hover { color: var(--accent); }
+  .nav-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .nav-btn span { margin-right:6px; }
+
+  /* MAIN LAYOUT */
+  main {
+    position:relative;
+    z-index:1;
+    max-width:1200px;
+    margin:0 auto;
+    padding:32px 24px;
+  }
+
+  /* SECTIONS */
+  .section { display:none; animation: fadeIn 0.3s ease; }
+  .section.active { display:block; }
+
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(8px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family:'Syne', sans-serif;
+    font-size:13px;
+    color: var(--accent);
+    letter-spacing:4px;
+    text-transform:uppercase;
+    margin-bottom:24px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .section-title::after {
+    content:'';
+    flex:1;
+    height:1px;
+    background: var(--border);
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom:16px;
+    position:relative;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    border-color: rgba(0,245,196,0.4);
+    box-shadow: var(--glow);
+  }
+
+  .card-title {
+    font-family:'Syne', sans-serif;
+    font-size:16px;
+    font-weight:700;
+    color:#fff;
+    margin-bottom:12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .card-title .icon {
+    width:28px; height:28px;
+    background: rgba(0,245,196,0.1);
+    border: 1px solid var(--accent);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    flex-shrink:0;
+  }
+
+  .card p, .card li {
+    font-size:13px;
+    line-height:1.8;
+    color: var(--text);
+  }
+
+  .card ul { padding-left:20px; }
+  .card li { margin-bottom:4px; }
+
+  /* GRID */
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+
+  @media(max-width:768px) {
+    .grid-2, .grid-3 { grid-template-columns:1fr; }
+    header { padding:24px; }
+    main { padding:20px 16px; }
+  }
+
+  /* HIGHLIGHT */
+  .hl { color: var(--accent); font-weight:500; }
+  .hl2 { color: var(--accent2); font-weight:500; }
+  .hl3 { color: var(--accent3); font-weight:500; }
+
+  /* TAGS */
+  .tag {
+    display:inline-block;
+    background: rgba(0,245,196,0.08);
+    border: 1px solid rgba(0,245,196,0.25);
+    color: var(--accent);
+    font-size:10px;
+    letter-spacing:1.5px;
+    padding:3px 8px;
+    margin:2px;
+    text-transform:uppercase;
+  }
+  .tag.orange { background:rgba(245,166,35,0.08); border-color:rgba(245,166,35,0.25); color:var(--accent2); }
+  .tag.purple { background:rgba(224,64,251,0.08); border-color:rgba(224,64,251,0.25); color:var(--accent3); }
+  .tag.red { background:rgba(255,69,96,0.08); border-color:rgba(255,69,96,0.25); color:var(--red); }
+
+  /* TABLE */
+  .tbl { width:100%; border-collapse:collapse; font-size:12px; margin-top:8px; }
+  .tbl th {
+    background: rgba(0,245,196,0.08);
+    color: var(--accent);
+    text-align:left;
+    padding:10px 12px;
+    letter-spacing:1px;
+    font-size:11px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tbl td {
+    padding:10px 12px;
+    border-bottom:1px solid rgba(0,245,196,0.05);
+    color: var(--text);
+    line-height:1.5;
+  }
+  .tbl tr:hover td { background: rgba(0,245,196,0.03); }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom:20px;
+  }
+
+  .quiz-question {
+    font-family:'Syne', sans-serif;
+    font-size:16px;
+    font-weight:600;
+    color:#fff;
+    margin-bottom:20px;
+    line-height:1.5;
+  }
+
+  .quiz-num {
+    color: var(--accent);
+    font-size:11px;
+    letter-spacing:2px;
+    margin-bottom:8px;
+    display:block;
+  }
+
+  .options { display:flex; flex-direction:column; gap:8px; }
+
+  .option-btn {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text);
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    padding:12px 16px;
+    text-align:left;
+    cursor:pointer;
+    transition: all 0.15s;
+    line-height:1.4;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(0,245,196,0.05);
+    color:#fff;
+  }
+
+  .option-btn.correct {
+    background: rgba(0,245,196,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .option-btn.wrong {
+    background: rgba(255,69,96,0.1);
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .feedback {
+    margin-top:16px;
+    padding:12px 16px;
+    font-size:13px;
+    line-height:1.6;
+    display:none;
+    border-left:3px solid var(--accent);
+    background: rgba(0,245,196,0.05);
+    color: var(--text);
+  }
+  .feedback.wrong-fb { border-color: var(--red); background: rgba(255,69,96,0.05); }
+  .feedback.show { display:block; }
+
+  /* SCORE */
+  .score-bar {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding:16px 24px;
+    margin-bottom:24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+
+  .score-label { font-size:12px; color:var(--text2); letter-spacing:1px; }
+  .score-val {
+    font-family:'Syne', sans-serif;
+    font-size:28px;
+    font-weight:800;
+    color: var(--accent);
+  }
+
+  .progress-track {
+    flex:1;
+    min-width:120px;
+    height:4px;
+    background: rgba(255,255,255,0.06);
+    position:relative;
+    overflow:hidden;
+  }
+
+  .progress-fill {
+    height:100%;
+    background: var(--accent);
+    transition: width 0.4s ease;
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  .btn {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:2px;
+    padding:10px 20px;
+    cursor:pointer;
+    text-transform:uppercase;
+    transition: all 0.2s;
+  }
+
+  .btn:hover {
+    background: rgba(0,245,196,0.1);
+    box-shadow: var(--glow);
+  }
+
+  .btn.orange { border-color:var(--accent2); color:var(--accent2); }
+  .btn.orange:hover { background:rgba(245,166,35,0.1); box-shadow:var(--glow2); }
+
+  /* CHEATSHEET */
+  .cheat-block {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(0,245,196,0.1);
+    padding:16px 20px;
+    margin-bottom:12px;
+    font-size:12px;
+    line-height:1.9;
+    border-left: 3px solid var(--accent);
+  }
+
+  .cheat-block.orange { border-left-color: var(--accent2); }
+  .cheat-block.purple { border-left-color: var(--accent3); }
+  .cheat-block.red { border-left-color: var(--red); }
+
+  .cheat-key {
+    font-family:'Syne', sans-serif;
+    font-weight:700;
+    color:#fff;
+    font-size:13px;
+    display:block;
+    margin-bottom:6px;
+  }
+
+  /* FLASHCARD GAME */
+  .flashcard-wrap {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+    padding:20px 0;
+  }
+
+  .flashcard {
+    width:100%;
+    max-width:600px;
+    height:200px;
+    perspective:1000px;
+    cursor:pointer;
+  }
+
+  .flashcard-inner {
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+
+  .flashcard-front, .flashcard-back {
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+    text-align:center;
+    border:1px solid var(--border);
+  }
+
+  .flashcard-front {
+    background: linear-gradient(135deg, #0d1117, #111820);
+  }
+
+  .flashcard-back {
+    background: linear-gradient(135deg, rgba(0,245,196,0.08), rgba(0,245,196,0.03));
+    border-color: rgba(0,245,196,0.3);
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-label {
+    font-size:10px;
+    letter-spacing:3px;
+    color: var(--text2);
+    text-transform:uppercase;
+    margin-bottom:12px;
+  }
+
+  .flashcard-text {
+    font-family:'Syne', sans-serif;
+    font-size:18px;
+    font-weight:700;
+    color:#fff;
+    line-height:1.4;
+  }
+
+  .flashcard-answer {
+    font-size:14px;
+    color: var(--accent);
+    line-height:1.6;
+    font-weight:400;
+  }
+
+  .flashcard-hint {
+    font-size:11px;
+    color:var(--text2);
+    margin-top:12px;
+    letter-spacing:1px;
+  }
+
+  .fc-controls {
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+
+  .fc-counter {
+    font-size:12px;
+    color:var(--text2);
+    min-width:80px;
+    text-align:center;
+  }
+
+  /* APUNTS */
+  .apunt-section {
+    margin-bottom:32px;
+  }
+
+  .apunt-h2 {
+    font-family:'Syne', sans-serif;
+    font-size:14px;
+    font-weight:700;
+    color: var(--accent2);
+    letter-spacing:3px;
+    text-transform:uppercase;
+    padding:12px 0;
+    border-bottom:1px solid rgba(245,166,35,0.2);
+    margin-bottom:16px;
+  }
+
+  .apunt-h3 {
+    font-family:'Syne', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    color:#fff;
+    margin:16px 0 8px;
+  }
+
+  .apunt-p {
+    font-size:13px;
+    line-height:1.8;
+    color: var(--text);
+    margin-bottom:8px;
+  }
+
+  .apunt-ul {
+    padding-left:20px;
+    margin-bottom:8px;
+  }
+
+  .apunt-ul li {
+    font-size:13px;
+    line-height:1.8;
+    color:var(--text);
+    margin-bottom:3px;
+  }
+
+  /* EXAMEN TIPS */
+  .tip-card {
+    background: linear-gradient(135deg, rgba(224,64,251,0.06), rgba(224,64,251,0.02));
+    border: 1px solid rgba(224,64,251,0.2);
+    padding:20px 24px;
+    margin-bottom:12px;
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+  }
+
+  .tip-num {
+    font-family:'Syne', sans-serif;
+    font-size:24px;
+    font-weight:800;
+    color: var(--accent3);
+    opacity:0.4;
+    min-width:32px;
+    line-height:1;
+  }
+
+  .tip-content { flex:1; }
+  .tip-q {
+    font-family:'Syne', sans-serif;
+    font-size:14px;
+    font-weight:700;
+    color:#fff;
+    margin-bottom:6px;
+  }
+  .tip-a { font-size:13px; color:var(--text); line-height:1.6; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:rgba(0,245,196,0.2); }
+  ::-webkit-scrollbar-thumb:hover { background:rgba(0,245,196,0.4); }
+
+  /* CORNER DECORATIONS */
+  .corner {
+    position:absolute;
+    width:16px;
+    height:16px;
+    border-color: var(--accent);
+    border-style:solid;
+    opacity:0.5;
+  }
+  .corner.tl { top:0; left:0; border-width:2px 0 0 2px; }
+  .corner.tr { top:0; right:0; border-width:2px 2px 0 0; }
+  .corner.bl { bottom:0; left:0; border-width:0 0 2px 2px; }
+  .corner.br { bottom:0; right:0; border-width:0 2px 2px 0; }
+
+  .card { position:relative; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <span class="logo-tag">// CFGM · SMIX · Joviat</span>
+    <h1>XARXES <span>LOCALS</span></h1>
+  </div>
+  <span class="badge">MÒDUL 0225 · RA1</span>
+</header>
+
+<nav>
+  <button class="nav-btn active" onclick="showSection('resum')" data-section="resum">
+    <span>📋</span> RESUM
+  </button>
+  <button class="nav-btn" onclick="showSection('examen')" data-section="examen">
+    <span>🎯</span> EXAMEN
+  </button>
+  <button class="nav-btn" onclick="showSection('quiz')" data-section="quiz">
+    <span>⚡</span> QUIZ
+  </button>
+  <button class="nav-btn" onclick="showSection('flashcards')" data-section="flashcards">
+    <span>🃏</span> FLASHCARDS
+  </button>
+  <button class="nav-btn" onclick="showSection('apunts')" data-section="apunts">
+    <span>📖</span> APUNTS COMPLETS
+  </button>
+</nav>
+
+<main>
+
+<!-- ==================== RESUM ==================== -->
+<div class="section active" id="resum">
+  <div class="section-title">Resum del tema</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+      <div class="card-title"><div class="icon">📡</div> Model OSI — 7 Capes</div>
+      <table class="tbl">
+        <tr><th>#</th><th>Capa</th><th>Funció clau</th></tr>
+        <tr><td class="hl">7</td><td>Aplicació</td><td>Interfície amb l'usuari</td></tr>
+        <tr><td class="hl">6</td><td>Presentació</td><td>Format, compressió, xifrat</td></tr>
+        <tr><td class="hl">5</td><td>Sessió</td><td>Gestió de diàleg</td></tr>
+        <tr><td class="hl">4</td><td>Transport</td><td>TCP/SPX — fiabilitat extrem a extrem</td></tr>
+        <tr><td class="hl">3</td><td>Xarxa</td><td>IP/IPX — encaminament global</td></tr>
+        <tr><td class="hl2">2</td><td>Enllaç</td><td>MAC+LLC — accés al medi local</td></tr>
+        <tr><td class="hl2">1</td><td>Física</td><td>Cables, senyals, connectors</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">🔌</div> Topologies de Xarxa</div>
+      <table class="tbl">
+        <tr><th>Topologia</th><th>Avantatge</th><th>Desavantatge</th></tr>
+        <tr><td class="hl">Bus</td><td>Cable curt, econòmic</td><td>Diagnosi difícil</td></tr>
+        <tr><td class="hl">Estrella</td><td>Diagnosi centralitzada</td><td>Depèn del node central</td></tr>
+        <tr><td class="hl">Anell</td><td>Cable curt, adient fibra</td><td>1 fallada = tota la xarxa</td></tr>
+        <tr><td class="hl">Malla</td><td>Molt segura</td><td>Molt cara</td></tr>
+        <tr><td class="hl">Arbre</td><td>Jeràrquica, escalable</td><td>Complex</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title"><div class="icon">🌐</div> Tipus de Xarxes</div>
+      <ul>
+        <li><span class="hl">PAN</span> — Àrea personal (Bluetooth)</li>
+        <li><span class="hl">LAN</span> — Edifici. Administrada privadament</li>
+        <li><span class="hl">MAN</span> — Àrea metropolitana (ciutat)</li>
+        <li><span class="hl">WAN</span> — Abast mundial (Internet)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">📶</div> Modes de Transmissió</div>
+      <ul>
+        <li><span class="hl">Símplex</span> — 1 sola direcció</li>
+        <li><span class="hl">Half-duplex</span> — Alternativa (WiFi, walkie)</li>
+        <li><span class="hl">Full-duplex</span> — Simultàni ambdós sentits</li>
+        <li><span class="hl">Sèrie</span> — Bit a bit, 1 canal</li>
+        <li><span class="hl">Paral·lel</span> — Tots els bits alhora</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">⚠️</div> Pertorbacions del Senyal</div>
+      <ul>
+        <li><span class="hl2">Atenuació</span> — Pèrdua de potència (dB)</li>
+        <li><span class="hl2">Soroll</span> — Senyals aleatòries</li>
+        <li><span class="hl2">Interferència</span> — Senyal del mateix tipus</li>
+        <li><span class="hl2">Diafonia</span> — Entre cables del mateix maç</li>
+        <li><span class="hl2">Distorsió</span> — Alteració del senyal original</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><div class="icon">🔧</div> Cables i Connectors</div>
+      <table class="tbl">
+        <tr><th>Cable</th><th>Connector</th><th>Característiques</th></tr>
+        <tr><td class="hl">UTP</td><td>RJ-45</td><td>Barat, el més usat, susceptible interferències</td></tr>
+        <tr><td class="hl">FTP</td><td>RJ-45</td><td>Apantallat global, sense protecció diafonia</td></tr>
+        <tr><td class="hl">STP</td><td>RJ-45</td><td>Apantallat per parell, protegeix diafonia</td></tr>
+        <tr><td class="hl">Coaxial</td><td>BNC</td><td>50Ω / 75Ω, RG-8, RG-58</td></tr>
+        <tr><td class="hl">Fibra òptica</td><td>SC, ST, LC</td><td>Immune EM, baixa pèrdua, llargues distàncies</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">📡</div> WiFi — Estàndards 802.11</div>
+      <table class="tbl">
+        <tr><th>Estàndard</th><th>Banda</th><th>Velocitat màx.</th></tr>
+        <tr><td class="hl">802.11b (WiFi1)</td><td>2.4 GHz</td><td>11 Mbps</td></tr>
+        <tr><td class="hl">802.11a (WiFi2)</td><td>5 GHz</td><td>54 Mbps</td></tr>
+        <tr><td class="hl">802.11g (WiFi3)</td><td>2.4 GHz</td><td>54 Mbps</td></tr>
+        <tr><td class="hl">802.11n (WiFi4)</td><td>2.4+5 GHz</td><td>500 Mbps</td></tr>
+        <tr><td class="hl">802.11ac (WiFi5)</td><td>5 GHz</td><td>2 Gbps</td></tr>
+        <tr><td class="hl">802.11ax (WiFi6)</td><td>2.4+5+6 GHz</td><td>10 Gbps</td></tr>
+        <tr><td class="hl">802.11be (WiFi7)</td><td>2.4+5+6 GHz</td><td>46 Gbps</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title"><div class="icon">🛡️</div> Seguretat WiFi</div>
+      <ul>
+        <li><span class="hl2">WEP</span> — TRENCAT (64-256 bits). No usar!</li>
+        <li><span class="hl">WPA</span> — 128 bits TKIP (2003)</li>
+        <li><span class="hl">WPA2</span> — 128 bits AES (802.11i)</li>
+        <li><span class="hl">WPA3</span> — 128/192 bits + SAE (2018)</li>
+        <li><span class="hl">WPS</span> — Forat seguretat! Desactivar</li>
+        <li><span class="hl">PSK</span> — Mode personal (clau compartida)</li>
+        <li><span class="hl">RADIUS</span> — Mode empresarial</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">💾</div> RAID — Nivells</div>
+      <ul>
+        <li><span class="hl">RAID 0</span> — Velocitat, SENSE redundància</li>
+        <li><span class="hl">RAID 1</span> — Mirall (mirroring), cost x2</li>
+        <li><span class="hl">RAID 5</span> — Paritat distribuïda, el més usat</li>
+        <li><span class="hl">RAID 10</span> — Combina RAID 0 + RAID 1</li>
+      </ul>
+      <br>
+      <p><span class="hl2">NAS</span> — Emmagatzemament en xarxa local<br>
+      <span class="hl2">SAN</span> — Xarxa d'emmagatzemament apart</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">🔁</div> Elements d'Interconnexió</div>
+      <ul>
+        <li><span class="hl">Hub/Repetidor</span> — Capa 1 física. Regenera senyal</li>
+        <li><span class="hl">Bridge (pont)</span> — Capa 2 enllaç. Uneix xarxes</li>
+        <li><span class="hl">Switch</span> — Capa 2. Aïlla dominis col·lisió</li>
+        <li><span class="hl">Router</span> — Capa 3. Encaminament entre xarxes</li>
+      </ul>
+      <br>
+      <p><span class="hl2">CSMA/CD</span> — Ethernet (col·lisió detectada)<br>
+      <span class="hl2">CSMA/CA</span> — WiFi (col·lisió evitada)</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🚀</div> Ethernet — Variants principals</div>
+    <table class="tbl">
+      <tr><th>Nom</th><th>Velocitat</th><th>Cable</th><th>Longitud màx. segment</th></tr>
+      <tr><td class="hl">10base5 (Thicknet)</td><td>10 Mbps</td><td>Coaxial gruix</td><td>500 m, màx. 100 nodes</td></tr>
+      <tr><td class="hl">10base2 (Thinnet)</td><td>10 Mbps</td><td>RG-58 coaxial</td><td>185 m, màx. 30 nodes</td></tr>
+      <tr><td class="hl">10baseT</td><td>10 Mbps</td><td>UTP Cat3</td><td>100 m per segment</td></tr>
+      <tr><td class="hl">100baseTX</td><td>100 Mbps</td><td>UTP Cat5 (2 parells)</td><td>100 m</td></tr>
+      <tr><td class="hl">100baseFX</td><td>100 Mbps</td><td>Fibra multimode 62.5μm</td><td>400 m</td></tr>
+      <tr><td class="hl">1000baseT</td><td>1 Gbps</td><td>UTP Cat5e/6 (4 parells)</td><td>100 m</td></tr>
+      <tr><td class="hl">1000baseLX</td><td>1 Gbps</td><td>Fibra monomode 1300nm</td><td>5 Km</td></tr>
+    </table>
+    <br>
+    <p><span class="hl">Regla 5-4-3:</span> Màxim 5 segments, 4 repetidors, 3 segments amb nodes (a 10 Mbps)</p>
+  </div>
+</div>
+
+<!-- ==================== EXAMEN ==================== -->
+<div class="section" id="examen">
+  <div class="section-title">Preguntes probables d'examen</div>
+
+  <div id="examCards"></div>
+</div>
+
+<!-- ==================== QUIZ ==================== -->
+<div class="section" id="quiz">
+  <div class="section-title">Test interactiu</div>
+
+  <div class="score-bar">
+    <div>
+      <div class="score-label">PUNTUACIÓ</div>
+      <div class="score-val" id="scoreVal">0/0</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div>
+      <div class="score-label">PREGUNTA</div>
+      <div class="score-val" id="qCounter">1/20</div>
+    </div>
+    <button class="btn" onclick="resetQuiz()">↺ REINICIAR</button>
+  </div>
+
+  <div id="quizContainer"></div>
+</div>
+
+<!-- ==================== FLASHCARDS ==================== -->
+<div class="section" id="flashcards">
+  <div class="section-title">Flashcards — Clica per veure la resposta</div>
+
+  <div class="flashcard-wrap">
+    <div class="flashcard" id="fc" onclick="flipCard()">
+      <div class="flashcard-inner">
+        <div class="flashcard-front">
+          <span class="flashcard-label">// CONCEPTE</span>
+          <div class="flashcard-text" id="fcQuestion">...</div>
+          <span class="flashcard-hint">↩ clica per girar</span>
+        </div>
+        <div class="flashcard-back">
+          <span class="flashcard-label">// RESPOSTA</span>
+          <div class="flashcard-answer" id="fcAnswer">...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-controls">
+      <button class="btn" onclick="prevCard()">← ANTERIOR</button>
+      <span class="fc-counter" id="fcCounter">1 / 30</span>
+      <button class="btn" onclick="nextCard()">SEGÜENT →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== APUNTS ==================== -->
+<div class="section" id="apunts">
+  <div class="section-title">Apunts complets del RA1</div>
+  <div id="apuntsContent"></div>
+</div>
+
+</main>
+
+<script>
+// ==================== DADES ====================
+
+const examPreguntes = [
+  { q:"Quines són les 7 capes del model OSI en ordre de menor a major?", a:"1-Física, 2-Enllaç de dades, 3-Xarxa, 4-Transport, 5-Sessió, 6-Presentació, 7-Aplicació", tipus:"teoria", importancia:"🔴 MUY PROBABLE" },
+  { q:"Quina diferència hi ha entre hub i switch?", a:"El hub treballa a la capa física i envia a tots els ports. El switch treballa a la capa d'enllaç (capa 2) i envia només al port de l'adreça destí, aïllant dominis de col·lisió", tipus:"diferència", importancia:"🔴 MUY PROBABLE" },
+  { q:"Explica el mecanisme CSMA/CD d'Ethernet", a:"Carrier Sense Multiple Access/Collision Detection. El node escolta el medi; si lliure, emet. Si col·lisió, emet jam pattern, espera un temps aleatori i reintenta. Garanteix detecció de col·lisions en topologia bus lògica.", tipus:"explicació", importancia:"🔴 MUY PROBABLE" },
+  { q:"Quina diferència hi ha entre CSMA/CD i CSMA/CA?", a:"CSMA/CD és d'Ethernet (detecta col·lisions). CSMA/CA és de WiFi (evita col·lisions), usa RTS/CTS i paquets ACK ja que no es pot emetre i escoltar alhora per ràdio.", tipus:"diferència", importancia:"🔴 MUY PROBABLE" },
+  { q:"Quins canals no es solapen a la banda 2,4 GHz (802.11b/g)?", a:"Els canals 1, 6 i 11. S'han de deixar 5 canals de marge entre APs propers per evitar interferències.", tipus:"pràctic", importancia:"🔴 MUY PROBABLE" },
+  { q:"Quin sistema de seguretat WiFi s'ha de fer servir i per qué?", a:"WPA3 (o almenys WPA2). WEP és considerat trencat des del 2001 i no s'ha d'usar. WPA3 usa 128/192 bits i l'autenticació SAE en comptes de PSK compartida.", tipus:"seguretat", importancia:"🔴 MUY PROBABLE" },
+  { q:"Explica la diferència entre RAID 0, RAID 1 i RAID 5", a:"RAID 0: distribució sense redundància (velocitat). RAID 1: mirall exacte (seguretat, cost x2). RAID 5: dades+paritat distribuïda en tots els discos (seguretat+rendiment, necessita mínim 3 discos).", tipus:"explicació", importancia:"🟠 PROBABLE" },
+  { q:"Quina és la longitud màxima d'un segment en 10baseT i per qué?", a:"100 metres. La limitació és l'atenuació del senyal elèctric en el cable UTP. Un hub regenera el senyal permetent ampliar la xarxa.", tipus:"pràctic", importancia:"🟠 PROBABLE" },
+  { q:"Qué és la regla 5-4-3 d'Ethernet a 10 Mbps?", a:"Una transmissió entre dos nodes pot passar per màxim 5 segments, connectats per 4 repetidors, dels quals només 3 segmens poden tenir nodes connectats.", tipus:"teoria", importancia:"🟠 PROBABLE" },
+  { q:"Qué és una adreça MAC i on s'utilitza?", a:"És una adreça física de 48 bits (12 caràcters hexadecimals) única per targeta de xarxa, gravada pel fabricant. S'usa a la capa 2 (Enllaç) per identificar dispositius dins d'una xarxa local.", tipus:"teoria", importancia:"🟠 PROBABLE" },
+  { q:"Qué és el roaming WiFi?", a:"El procediment que permet a una estació passar a dependre d'un altre Access Point (AP) sense perdre la connexió ni haver-se de tornar a autenticar.", tipus:"teoria", importancia:"🟡 MENYS PROBABLE" },
+  { q:"Diferències entre NAS i SAN", a:"NAS (Network Attached Storage): servidor de fitxers connectat a la LAN, senzill d'implementar. SAN (Storage Area Network): xarxa d'emmagatzemament separada amb protocols específics i gran velocitat de transferència.", tipus:"diferència", importancia:"🟡 MENYS PROBABLE" },
+  { q:"Per qué la fibra òptica és superior al cable de coure?", a:"Baixes pèrdues (0.25 dB/km), immunitat a interferències electromagnètiques, major capacitat de transmissió, distàncies molt més llargues, major seguretat, aïllament elèctric entre emissor i receptor.", tipus:"teoria", importancia:"🟠 PROBABLE" },
+  { q:"Qué és el SSID i per a qué serveix?", a:"Service Set Identifier. Identificador de fins a 32 caràcters alfanumèrics que identifica una xarxa WiFi. Tots els APs d'un mateix ESS han de tenir el mateix SSID.", tipus:"teoria", importancia:"🟡 MENYS PROBABLE" },
+  { q:"Qué significa 100baseTX i quins paràmetres indica?", a:"100 = velocitat de transmissió (100 Mbps), base = banda base, TX = tipus de cable (UTP Categoria 5, 2 parells). Longitud màxima de segment: 100 m.", tipus:"pràctic", importancia:"🟠 PROBABLE" },
+  { q:"Quin és el problema principal de WPS?", a:"El mètode PIN WPS crea una vulnerabilitat perquè trencar un PIN de 8 xifres no és difícil. Es recomana desactivar WPS al router.", tipus:"seguretat", importancia:"🟡 MENYS PROBABLE" },
+  { q:"Explica la diferència entre xarxa peer-to-peer i client-servidor", a:"P2P: tots els ordinadors tenen la mateixa categoria, barata però limitada. Client-servidor: servidors potents amb SO de xarxa ofereixen serveis als clients; és més cara però ofereix més prestacions i seguretat.", tipus:"teoria", importancia:"🟠 PROBABLE" },
+  { q:"Qué és MIMO i com augmenta la velocitat?", a:"Multiple Input Multiple Output: usa múltiples antenes en emissor i receptor. Aprofita la diversitat espacial (millora SNR) i la multiplexació espacial (múltiples fluxos de dades simultanis) per augmentar la velocitat.", tipus:"teoria", importancia:"🟡 MENYS PROBABLE" },
+  { q:"Quins protocols s'usen a la capa de transport en xarxes locals?", a:"TCP (Transmission Control Protocol) d'Internet i SPX (Sequenced Packet Exchange) de NetWare.", tipus:"teoria", importancia:"🟡 MENYS PROBABLE" },
+  { q:"Qué és la capa MAC i la capa LLC?", a:"Ambdues són subcapes de la capa 2 (Enllaç). MAC (Media Access Control) controla l'accés al medi físic (CSMA/CD, Token Ring). LLC (Logical Link Control) proporciona serveis a la capa de xarxa com control de flux.", tipus:"teoria", importancia:"🟠 PROBABLE" },
+];
+
+const quizPreguntes = [
+  { q:"Quants bits té una adreça MAC?", opts:["16 bits","32 bits","48 bits","64 bits"], c:2, exp:"Les adreces MAC tenen 48 bits, representades com 12 caràcters hexadecimals." },
+  { q:"Quin protocol usa WiFi per accedir al medi?", opts:["CSMA/CD","CSMA/CA","Token Ring","FDDI"], c:1, exp:"WiFi usa CSMA/CA (Collision Avoidance) en comptes de CSMA/CD (Collision Detection) perquè no pot escoltar i emetre alhora." },
+  { q:"Quina capa OSI s'encarrega de l'encaminament global?", opts:["Capa 1 - Física","Capa 2 - Enllaç","Capa 3 - Xarxa","Capa 4 - Transport"], c:2, exp:"La capa 3 (Xarxa) s'ocupa de l'encaminament de paquets des de l'origen fins al destí globalment, usant protocols com IP o IPX." },
+  { q:"Quin sistema de seguretat WiFi es considera TRENCAT?", opts:["WPA","WPA2","WPA3","WEP"], c:3, exp:"WEP va ser trencat l'any 2001 per experts d'AT&T. No s'ha d'usar mai. WPA2 i WPA3 són les alternatives segures." },
+  { q:"En 10base2, quants nodes màxim pot tenir un segment?", opts:["10","30","100","1024"], c:1, exp:"10base2 (Thinnet) permet un màxim de 30 nodes per segment, amb una longitud màxima de 185 m." },
+  { q:"Quin RAID no ofereix redundància?", opts:["RAID 0","RAID 1","RAID 5","RAID 10"], c:0, exp:"RAID 0 distribueix les dades (striping) per millorar la velocitat però NO ofereix cap redundància. Si falla un disc, es perden TOTES les dades." },
+  { q:"Quina és la longitud màxima d'un segment 10baseT?", opts:["50 m","100 m","185 m","500 m"], c:1, exp:"10baseT (UTP) té una longitud màxima de 100 metres per segment, limitada per l'atenuació del senyal." },
+  { q:"Quin connector s'usa típicament per cable UTP en xarxes locals?", opts:["BNC","RJ-11","RJ-45","SC"], c:2, exp:"El connector RJ-45 s'usa per cables UTP en xarxes locals. El RJ-11 és per telefonia (2 parells). El BNC és per cable coaxial." },
+  { q:"En quina capa OSI treballen els switches?", opts:["Capa 1","Capa 2","Capa 3","Capa 4"], c:1, exp:"Els switches (commutadors) treballen a la capa 2 (Enllaç de dades) i operen amb adreces MAC per enviar paquets al port correcte." },
+  { q:"Quin protocol de xifrat usa WPA2?", opts:["DES","TKIP","AES","RC4"], c:2, exp:"WPA2 usa el protocol AES (Advanced Encryption Standard) de 128 bits. WPA original usava TKIP." },
+  { q:"Quins canals no es solapen a 2,4 GHz?", opts:["1, 5, 11","1, 6, 11","2, 6, 10","1, 7, 13"], c:1, exp:"Els canals 1, 6 i 11 no es solapen a la banda 2,4 GHz. S'han de deixar 5 canals de separació entre APs adjacents." },
+  { q:"Qué és la diafonia?", opts:["Pèrdua de potència del senyal","Senyal aleatori afegit al senyal","Interferència entre cables del mateix maç","Alteració del senyal original"], c:2, exp:"La diafonia (crosstalk) és la interferència produïda entre cables d'un mateix maç o feix de cables." },
+  { q:"Quina velocitat màxima permet 802.11ac?", opts:["300 Mbps","500 Mbps","1 Gbps","2 Gbps"], c:3, exp:"802.11ac (WiFi5) permet una velocitat màxima teòrica de 2 Gbps, operant a la banda de 5 GHz amb MU-MIMO de fins a 8x8." },
+  { q:"Qué fa un repetidor?", opts:["Filtra paquets per MAC","Regenera el senyal","Encamina paquets entre xarxes","Tradueix protocols"], c:1, exp:"Un repetidor treballa a la capa física i regenera el senyal per ampliar la distància de la xarxa sense perdre qualitat de senyal." },
+  { q:"Quin és el sistema de paritat que afegeix un bit addicional a cada caràcter?", opts:["LRC","CRC","VRC","ARQ"], c:2, exp:"VRC (Vertical Redundancy Check) afegeix un bit de paritat a cada caràcter. Detecta un nombre senar d'errors però té utilitat limitada." },
+  { q:"Quines bandes usa 802.11n?", opts:["Només 2,4 GHz","Només 5 GHz","2,4 GHz i 5 GHz","5 GHz i 6 GHz"], c:2, exp:"802.11n (WiFi4) és dual-band i opera tant a 2,4 GHz com a 5 GHz, incorporant MIMO per assolir fins a 500 Mbps." },
+  { q:"Qué significa que una xarxa treballa en mode Datagrama?", opts:["Connexió dedicada entre nodes","No s'estableix circuit virtual previ, cada paquet va pel millor camí","Els paquets sempre arriben en ordre","S'usa circuit virtual permanent"], c:1, exp:"En mode Datagrama (protocols no orientats a connexió com IP), no hi ha fase d'establiment. Cada paquet cerca el camí òptim independentment i poden arribar desordenats." },
+  { q:"Quina és la impedància característica del cable coaxial més usat?", opts:["25 Ω i 50 Ω","50 Ω i 75 Ω","75 Ω i 100 Ω","100 Ω i 150 Ω"], c:1, exp:"Les impedàncies típiques en telecomunicació per cables coaxials són 50 Ω (xarxes de dades) i 75 Ω (TV per cable, RF)." },
+  { q:"RAID 5 necessita com a mínim quants discos?", opts:["2","3","4","5"], c:1, exp:"RAID 5 necessita almenys 3 discos per distribuir les dades i els blocs de paritat entre tots ells." },
+  { q:"WPS es va crear per...", opts:["Millorar la seguretat WPA3","Facilitar la configuració de xarxes WiFi a usuaris sense coneixements tècnics","Augmentar la velocitat de transmissió","Gestionar múltiples SSIDs"], c:1, exp:"WPS (WiFi Protected Setup) va ser creat per la WiFi Alliance l'any 2006 per facilitar la connexió de dispositius a xarxes WiFi sense haver d'introduir claus complexes." },
+];
+
+const flashcards = [
+  { q:"Qué és la Telemàtica?", a:"Branca de la tecnologia que estudia com intercanviar dades entre ordinadors a través de mitjans de transmissió, protocols i altres elements." },
+  { q:"Qué és un paquet?", a:"Unitat d'informació transmesa per la xarxa. La informació es divideix en paquets que permeten a diversos ordinadors usar seqüencialment la xarxa." },
+  { q:"Qué és una trama?", a:"Informació addicional que cada capa del model OSI afegeix al paquet. Cada trama conté camps amb funcions específiques (capçalera o cua)." },
+  { q:"Qué és OSI?", a:"Open System Interconnection. Projecte ISO/CCITT que divideix els serveis d'una xarxa en 7 capes, especificant els serveis de cada una." },
+  { q:"Qué fa la capa física (capa 1)?", a:"Defineix el medi físic: cables, connectors, voltatges per representar '1' i '0', velocitat de transmissió, forma d'explotació del circuit." },
+  { q:"Qué fa la capa d'enllaç (capa 2)?", a:"Empaquetat final de dades per al medi. Conté adreces locals (MAC). Control d'accés al medi (MAC) i link control (LLC). Evita col·lisions." },
+  { q:"Qué fa la capa de xarxa (capa 3)?", a:"Transmissió completa de paquets des de l'origen al destí globalment (pot ser a milers de km). Encaminament. Protocols: IP, IPX." },
+  { q:"Qué fa la capa de transport (capa 4)?", a:"Garanteix un enllaç lliure d'errors entre origen i destí. Multiplexació. Protocols: TCP (Internet), SPX (NetWare)." },
+  { q:"Qué fa la capa de sessió (capa 5)?", a:"Estableix i gestiona el canal de comunicació entre processos. Control de diàleg, separació. Protocols: NetBIOS, NetBEUI." },
+  { q:"Qué fa la capa de presentació (capa 6)?", a:"Negocia el format de dades entre sistemes (conversió EBCDIC ↔ ASCII). Compressió. Xifrat de dades." },
+  { q:"Qué fa la capa d'aplicació (capa 7)?", a:"Interfície entre l'aplicació i els recursos de xarxa. Proporciona eines per accedir als recursos de la xarxa (FTP, HTTP, etc.)." },
+  { q:"Qué és CSMA/CD?", a:"Carrier Sense Multiple Access / Collision Detection. Mecanisme d'accés al medi d'Ethernet. Escolta el medi, si lliure emet, si col·lisió emete jam pattern i reintenta." },
+  { q:"Qué és un domini de col·lisió?", a:"Conjunt de nodes que reben qualsevol paquet emès per qualsevol d'ells. Ethernet en topologia bus lògica és un únic domini de col·lisió." },
+  { q:"Qué és MIMO?", a:"Multiple Input Multiple Output. Ús de múltiples antenes per augmentar la velocitat WiFi mitjançant diversitat espacial i multiplexació espacial." },
+  { q:"Qué és el SSID?", a:"Service Set Identifier. Nom de la xarxa WiFi (fins a 32 caràcters alfanumèrics). Tots els APs d'un ESS han de tenir el mateix SSID." },
+  { q:"Qué és el BSS?", a:"Basic Service Set. Àrea coberta per un Access Point i tots els dispositius client connectats a ell." },
+  { q:"Qué és el roaming WiFi?", a:"Procediment que permet a una estació passar a dependre d'un altre AP sense perdre connexió ni tornar-se a autenticar." },
+  { q:"Qué és WPS i el seu problema?", a:"WiFi Protected Setup. Facilita la connexió sense introduir claus. El mètode PIN crea vulnerabilitat (8 xifres és fàcil de trencar). Recomanació: desactivar." },
+  { q:"Qué és NAS vs SAN?", a:"NAS: servidor de fitxers a la LAN. SAN: xarxa d'emmagatzemament separada amb protocols propis i alta velocitat (Gbps)." },
+  { q:"Qué és la multiplexació?", a:"Procés pel qual diverses comunicacions es combinen per transmetre per un sol canal físic, reduint costos i ample de banda." },
+  { q:"Qué és ARQ?", a:"Automatic Repeat Request. Estratègia de correcció d'errors: el destí detecta l'error i demana automàticament la retransmissió a l'origen." },
+  { q:"Qué és CRC?", a:"Cyclic Redundancy Check. Codi de detecció d'errors que tracta els bits com coeficients d'un polinomi per detectar errors de transmissió." },
+  { q:"Qué és el full-duplex vs half-duplex?", a:"Full-duplex: transmissió simultània en ambdós sentits. Half-duplex: transmissió alternativa en un o altre sentit (no alhora). WiFi és half-duplex." },
+  { q:"Qué és la regla 5-4-3?", a:"Norma Ethernet 10 Mbps: màxim 5 segments, 4 repetidors, 3 segments amb nodes. Garanteix detecció correcta de col·lisions." },
+  { q:"Qué és Fast Link Pulse?", a:"Pols que les targetes 100baseT envien per informar la resta de la xarxa de les seves capacitats (velocitat, full-duplex). Permet autonegociació." },
+  { q:"Qué és el canal de 40 MHz a WiFi?", a:"802.11n utilitza channel bonding per unir dos canals de 20 MHz en un de 40 MHz, doblant l'ample de banda disponible." },
+  { q:"Qué és OFDM?", a:"Orthogonal Frequency Division Multiplexing. Tècnica de transmissió WiFi moderna (802.11g/n/ac/ax) que permet velocitats més altes que DSSS/FHSS." },
+  { q:"Diferència capa física vs lògica d'estrella?", a:"Físicament és estrella (concentrador). Lògicament pot ser bus (hub, totes les estacions reben tot) o anell (switch, el senyal travessa els nodes)." },
+  { q:"Qué és una adreça MAC?", a:"Media Access Control. Adreça física de 48 bits (12 hex) única, gravada pel fabricant a la targeta de xarxa. Usada a la capa 2 per identificar dispositius locals." },
+  { q:"Qué és el port MDI-X?", a:"Port de hub/switch que creua internament els cables de transmissió i recepció, permetent connectar dispositius amb cable directe sense haver-lo de creuar manualment." },
+];
+
+// ==================== FUNCIONS ====================
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelector(`[data-section="${id}"]`).classList.add('active');
+
+  if(id === 'examen' && !examLoaded) loadExamen();
+  if(id === 'quiz' && !quizLoaded) loadQuiz();
+  if(id === 'flashcards' && !fcLoaded) loadFlashcards();
+  if(id === 'apunts' && !apuntsLoaded) loadApunts();
+}
+
+// EXAMEN
+let examLoaded = false;
+function loadExamen() {
+  examLoaded = true;
+  const container = document.getElementById('examCards');
+  examPreguntes.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'tip-card';
+    div.innerHTML = `
+      <div class="tip-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="tip-content">
+        <div style="margin-bottom:6px;">${getTipBadge(p.importancia)} <span class="tag ${getTipType(p.tipus)}">${p.tipus}</span></div>
+        <div class="tip-q">❓ ${p.q}</div>
+        <div class="tip-a" style="display:none;" id="exa${i}">${p.a}</div>
+        <button class="btn" style="margin-top:12px;font-size:11px;" onclick="toggleAns(${i})">👁 VEURE RESPOSTA</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function getTipBadge(imp) {
+  if(imp.includes('MUY')) return `<span class="tag red">MUY PROBABLE</span>`;
+  if(imp.includes('PROBABLE') && !imp.includes('MENYS')) return `<span class="tag orange">PROBABLE</span>`;
+  return `<span class="tag">menys probable</span>`;
+}
+
+function getTipType(t) {
+  if(t === 'diferència') return 'orange';
+  if(t === 'seguretat') return 'purple';
+  if(t === 'pràctic') return 'red';
+  return '';
+}
+
+function toggleAns(i) {
+  const el = document.getElementById('exa'+i);
+  const btn = el.nextElementSibling;
+  if(el.style.display === 'none') {
+    el.style.display = 'block';
+    btn.textContent = '🙈 AMAGAR';
+  } else {
+    el.style.display = 'none';
+    btn.textContent = '👁 VEURE RESPOSTA';
+  }
+}
+
+// QUIZ
+let quizLoaded = false;
+let score = 0;
+let answered = 0;
+let currentQ = 0;
+
+function loadQuiz() {
+  quizLoaded = true;
+  renderQuestion(currentQ);
+}
+
+function renderQuestion(i) {
+  const container = document.getElementById('quizContainer');
+  if(i >= quizPreguntes.length) {
+    container.innerHTML = `
+      <div class="quiz-card" style="text-align:center;">
+        <div class="quiz-question" style="font-size:24px;">🎉 Has acabat el test!</div>
+        <div class="score-val" style="font-size:48px;">${score}/${quizPreguntes.length}</div>
+        <div style="color:var(--text2);margin:12px 0 24px;">${getScoreMsg(score, quizPreguntes.length)}</div>
+        <button class="btn" onclick="resetQuiz()">↺ TORNAR A INTENTAR</button>
+      </div>
+    `;
+    return;
+  }
+
+  const p = quizPreguntes[i];
+  const qc = document.createElement('div');
+  qc.className = 'quiz-card';
+  qc.innerHTML = `
+    <span class="quiz-num">// PREGUNTA ${i+1} DE ${quizPreguntes.length}</span>
+    <div class="quiz-question">${p.q}</div>
+    <div class="options" id="opts">
+      ${p.opts.map((o,j) => `<button class="option-btn" onclick="checkAnswer(${j},${i})">${String.fromCharCode(65+j)}. ${o}</button>`).join('')}
+    </div>
+    <div class="feedback" id="fb"></div>
+  `;
+  container.innerHTML = '';
+  container.appendChild(qc);
+  updateScore();
+}
+
+function checkAnswer(selected, qi) {
+  const p = quizPreguntes[qi];
+  const opts = document.querySelectorAll('.option-btn');
+  opts.forEach(b => b.disabled = true);
+  
+  answered++;
+  const fb = document.getElementById('fb');
+  
+  if(selected === p.c) {
+    opts[selected].classList.add('correct');
+    score++;
+    fb.textContent = '✅ Correcte! ' + p.exp;
+    fb.classList.add('show');
+  } else {
+    opts[selected].classList.add('wrong');
+    opts[p.c].classList.add('correct');
+    fb.textContent = '❌ Incorrecte. ' + p.exp;
+    fb.classList.add('show','wrong-fb');
+  }
+
+  updateScore();
+
+  setTimeout(() => {
+    currentQ++;
+    renderQuestion(currentQ);
+  }, 2500);
+}
+
+function updateScore() {
+  document.getElementById('scoreVal').textContent = `${score}/${answered}`;
+  document.getElementById('qCounter').textContent = `${Math.min(currentQ+1, quizPreguntes.length)}/${quizPreguntes.length}`;
+  const pct = (currentQ / quizPreguntes.length) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function resetQuiz() {
+  score = 0; answered = 0; currentQ = 0;
+  updateScore();
+  renderQuestion(0);
+}
+
+function getScoreMsg(s, t) {
+  const pct = s/t;
+  if(pct >= 0.9) return '🏆 Excel·lent! Estàs preparat per l\'examen.';
+  if(pct >= 0.7) return '👍 Bé! Repassa els temes fallats.';
+  if(pct >= 0.5) return '📚 A estudiar! Moltes coses a repassar.';
+  return '💪 Toca estudiar, però tu pots!';
+}
+
+// FLASHCARDS
+let fcLoaded = false;
+let fcIndex = 0;
+let fcFlipped = false;
+
+function loadFlashcards() {
+  fcLoaded = true;
+  showCard(0);
+}
+
+function showCard(i) {
+  fcIndex = i;
+  fcFlipped = false;
+  const fc = document.getElementById('fc');
+  fc.classList.remove('flipped');
+  document.getElementById('fcQuestion').textContent = flashcards[i].q;
+  document.getElementById('fcAnswer').textContent = flashcards[i].a;
+  document.getElementById('fcCounter').textContent = `${i+1} / ${flashcards.length}`;
+}
+
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  document.getElementById('fc').classList.toggle('flipped', fcFlipped);
+}
+
+function nextCard() {
+  showCard((fcIndex + 1) % flashcards.length);
+}
+
+function prevCard() {
+  showCard((fcIndex - 1 + flashcards.length) % flashcards.length);
+}
+
+// APUNTS
+let apuntsLoaded = false;
+
+function loadApunts() {
+  apuntsLoaded = true;
+  const container = document.getElementById('apuntsContent');
+  container.innerHTML = `
+    <div class="apunt-section">
+      <div class="apunt-h2">1. Introducció a la Telemàtica</div>
+      <div class="apunt-h3">1.1 Velocitat de la informació</div>
+      <p class="apunt-p">Un ordinador pot emmagatzemar tot tipus de dades en format binari ('1s' i '0s'). La <span class="hl">telemàtica</span> és la branca de la tecnologia que estudia com intercanviar dades entre ordinadors a través de mitjans de transmissió, protocols i altres elements.</p>
+      <ul class="apunt-ul">
+        <li><span class="hl">Vt (Velocitat de transmissió sèrie):</span> nombre de bits transmesos per segon (bps) incloent tots els bits, fins i tot els de control.</li>
+        <li><span class="hl">Vtd (Velocitat de transferència de dades):</span> quantitat d'informació útil per unitat de temps. No compta bits de sincronisme, control d'errors, etc.</li>
+      </ul>
+      <p class="apunt-p">Múltiples: Kbps (×1000), Mbps (×1.000.000), Gbps (×1.000.000.000), Tbps.</p>
+
+      <div class="apunt-h3">1.2 Modes de transmissió</div>
+      <ul class="apunt-ul">
+        <li><span class="hl">Sèrie:</span> dades bit a bit per un sol canal. Usat a llargues distàncies.</li>
+        <li><span class="hl">Paral·lel:</span> tots els bits d'un caràcter simultàniament per múltiples canals. Usat en busos interns.</li>
+        <li><span class="hl">Símplex:</span> un sol sentit (telemetria).</li>
+        <li><span class="hl">Half-duplex:</span> alternativament en ambdós sentits. El més usat en transmissió de dades.</li>
+        <li><span class="hl">Full-duplex:</span> simultàniament en ambdós sentits.</li>
+      </ul>
+
+      <div class="apunt-h3">1.3 Protecció contra errors</div>
+      <ul class="apunt-ul">
+        <li><span class="hl">VRC</span> (bit de paritat per caràcter): detecció d'errors simples.</li>
+        <li><span class="hl">LRC</span> (caràcter de control per bloc): detecta ~92% d'errors.</li>
+        <li><span class="hl">CRC</span> (redundància cíclica): tracta els bits com coeficients d'un polinomi.</li>
+        <li><span class="hl">ARQ</span> (petició automàtica de repetició): el destí detecta error i sol·licita retransmissió. El més usat.</li>
+        <li>Codis autocorrectors: Hamming, Reed Muller (sense possibilitat de retorn).</li>
+      </ul>
+    </div>
+
+    <div class="apunt-section">
+      <div class="apunt-h2">2. El Model OSI</div>
+      <p class="apunt-p">Model de <span class="hl">7 capes</span> per normalitzar la interconnexió de sistemes. Cada capa proporciona serveis a la superior i rep serveis de la inferior.</p>
+      
+      <div class="apunt-h3">Capes i funcions:</div>
+      <ul class="apunt-ul">
+        <li><span class="hl">Capa 1 - Física:</span> cables, connectors, voltatges, velocitats. Continguts mecànics, elèctrics i lògics.</li>
+        <li><span class="hl">Capa 2 - Enllaç:</span> empaquetat final. Adreces MAC. MAC (accés al medi: CSMA/CD, Token Ring) i LLC (control de flux). CRC per errors.</li>
+        <li><span class="hl">Capa 3 - Xarxa:</span> encaminament global. Protocols orientats a connexió (circuit virtual) i no orientats (datagrama: IP, IPX). Pot arribar a milers de km.</li>
+        <li><span class="hl">Capa 4 - Transport:</span> garanteix lliurament fiable. Multiplexació. TCP (Internet), SPX (NetWare).</li>
+        <li><span class="hl">Capa 5 - Sessió:</span> establiment i gestió del diàleg. NetBIOS, NetBEUI.</li>
+        <li><span class="hl">Capa 6 - Presentació:</span> format de dades, conversió (EBCDIC ↔ ASCII), compressió, xifrat.</li>
+        <li><span class="hl">Capa 7 - Aplicació:</span> interfície usuari ↔ recursos de xarxa (FTP, HTTP, SMTP).</li>
+      </ul>
+    </div>
+
+    <div class="apunt-section">
+      <div class="apunt-h2">3. Topologies de Xarxa</div>
+      <p class="apunt-p"><span class="hl">Topologia física:</span> forma geomètrica de la disposició dels elements. <span class="hl">Topologia lògica:</span> com accedeixen els nodes al medi.</p>
+      <ul class="apunt-ul">
+        <li><span class="hl">Bus:</span> nodes al llarg d'un cable, terminadors als extrems. Cable curt, senzill, però diagnosi difícil.</li>
+        <li><span class="hl">Estrella:</span> concentrador central. Diagnosi centralitzada, fàcil d'expandir un node, però depèn del concentrador.</li>
+        <li><span class="hl">Anell:</span> nodes en sèrie, últim connectat al primer. Adient per fibra, però una fallada trenca tota la xarxa.</li>
+        <li><span class="hl">Malla:</span> cada node connectat a múltiples (idealment tots). Màxima seguretat, màxim cost.</li>
+        <li><span class="hl">Arbre:</span> jeràrquica. De cada node pengen nodes fills.</li>
+      </ul>
+    </div>
+
+    <div class="apunt-section">
+      <div class="apunt-h2">4. Mitjans de Transmissió</div>
+      <p class="apunt-p">Factors pertorbadors del senyal: <span class="hl">Atenuació</span> (dB), <span class="hl">Soroll</span> (aleatori), <span class="hl">Interferència</span> (mateix tipus), <span class="hl">Distorsió</span> (resposta imperfecta).</p>
+      
+      <div class="apunt-h3">Parells trenats:</div>
+      <ul class="apunt-ul">
+        <li><span class="hl">UTP:</span> No apantallat. Barat, el més usat, susceptible a interferències i diafonia. Connector RJ-45.</li>
+        <li><span class="hl">FTP:</span> Una capa metàl·lica envolta tots els parells. Protegeix interferències externes però no diafonia.</li>
+        <li><span class="hl">STP:</span> Apantallement per parell. Protegeix diafonia i interferències. Cal connectar a terra.</li>
+      </ul>
+
+      <div class="apunt-h3">Cable coaxial:</div>
+      <p class="apunt-p">Conductor central + dielèctric + malla (blindatge) + coberta. Impedàncies 50 Ω i 75 Ω. Connector BNC. Menys atenuació que UTP, menys interferències.</p>
+
+      <div class="apunt-h3">Fibra òptica:</div>
+      <p class="apunt-p">Transmissió de llum per sílice (SiO2). Nucli (core) + revestiment (cladding). Tipus: monomode, multimode de salt d'índex, multimode d'índex gradual.</p>
+      <p class="apunt-p">Avantatges: 0.25 dB/Km pèrdues, immune a EM, aïllament elèctric, fins a 4 Km per cable, altíssima capacitat. Connectors: SC, ST, LC, FC.</p>
+    </div>
+
+    <div class="apunt-section">
+      <div class="apunt-h2">5. Ethernet — IEEE 802.3</div>
+      <div class="apunt-h3">Notació Ethernet: 10BASE2</div>
+      <ul class="apunt-ul">
+        <li>10 → Velocitat (10, 100, 1000 Mbps)</li>
+        <li>BASE → Banda base (vs BROAD per banda ampla)</li>
+        <li>2 → Longitud màx. segment ×100 m, o T (Twisted pair) / F (Fibre)</li>
+      </ul>
+
+      <div class="apunt-h3">CSMA/CD:</div>
+      <p class="apunt-p">1) Escolta el medi. 2) Si lliure, emet. 3) Si col·lisió (nivell senyal elevat), emet jam pattern (32-48 bits CRC incorrecte). 4) Espera temps aleatori basat en adreça MAC. 5) Reintenta. Funcionament òptim a càrregues del 30-40%.</p>
+
+      <div class="apunt-h3">Trama IEEE 802.3:</div>
+      <p class="apunt-p">Preàmbul (7B) | Delimitador (1B) | Adreça destí (6B) | Adreça font (6B) | Longitud (2B) | Dades+padding (46-1500B) | CRC (4B). Mínim 64 bytes.</p>
+
+      <div class="apunt-h3">Regla 5-4-3 (10 Mbps):</div>
+      <p class="apunt-p">Màxim 5 segments, 4 repetidors, 3 segments amb nodes. Garanteix la detecció correcta de col·lisions en tot el domini.</p>
+    </div>
+
+    <div class="apunt-section">
+      <div class="apunt-h2">6. Servidors i Hardware de Xarxa</div>
+      <p class="apunt-p">Un servidor és un ordinador que proporciona serveis (fitxers, impressió, accés a Internet, etc.) als clients. Es distingeix del client principalment pel seu <span class="hl">sistema operatiu de xarxa</span> (Windows Server, Linux, Novell, UNIX).</p>
+      
+      <div class="apunt-h3">Components clau d'un servidor:</div>
+      <ul class="apunt-ul">
+        <li><span class="hl">Microprocessador:</span> de servidors (multiprocessador, fins a 4 CPU).</li>
+        <li><span class="hl">Memòria RAM:</span> abundant. Usada per caching de fitxers, FAT, etc.</li>
+        <li><span class="hl">Subsistema de disc:</span> SCSI, SAS, SATA. Alta concurrència.</li>
+        <li><span class="hl">RAID:</span> RAID 0 (velocitat), RAID 1 (mirall), RAID 5 (paritat distribuïda), RAID 10 (0+1).</li>
+        <li><span class="hl">NAS:</span> emmagatzemament a la LAN. Senzill.</li>
+        <li><span class="hl">SAN:</span> xarxa d'emmagatzemament apart, alta velocitat.</li>
+        <li><span class="hl">Targeta de xarxa:</span> pot ser coll d'ampolla. Un servidor pot tenir múltiples targetes.</li>
+      </ul>
+    </div>
+
+    <div class="apunt-section">
+      <div class="apunt-h2">7. Xarxes WiFi — IEEE 802.11</div>
+      <div class="apunt-h3">Components:</div>
+      <ul class="apunt-ul">
+        <li><span class="hl">AP (Access Point):</span> concentrador WiFi. Pot treballar com AP, repetidor, o pont punt a punt.</li>
+        <li><span class="hl">BSS:</span> àrea d'un AP + clients. <span class="hl">ESS:</span> múltiples BSS unides per un DS. Tots han de tenir el mateix SSID.</li>
+        <li><span class="hl">Ad-Hoc (IBSS):</span> xarxa sense AP, entre estacions directament.</li>
+      </ul>
+
+      <div class="apunt-h3">CSMA/CA:</div>
+      <p class="apunt-p">Escolta si el medi és lliure → espera temps → emet → receptor envia ACK → si no rep ACK, assumeix col·lisió → reintenta. Solució nodes ocults: RTS/CTS.</p>
+
+      <div class="apunt-h3">Bandes de freqüència:</div>
+      <ul class="apunt-ul">
+        <li><span class="hl">2,4 GHz:</span> 14 canals, 3 no solapats (1, 6, 11). Més cobertura, més interferències.</li>
+        <li><span class="hl">5 GHz:</span> 24 canals no solapats. Més velocitat, menys cobertura.</li>
+        <li><span class="hl">6 GHz:</span> (WiFi6/7). Nou espectre, menys congestionat.</li>
+      </ul>
+
+      <div class="apunt-h3">Seguretat:</div>
+      <ul class="apunt-ul">
+        <li><span class="hl">WEP:</span> TRENCAT (2001). No usar. 64-256 bits RC4.</li>
+        <li><span class="hl">WPA:</span> 128 bits TKIP. Intercanvi de claus.</li>
+        <li><span class="hl">WPA2 (802.11i):</span> 128 bits AES. Mode PSK (personal) o RADIUS (empresarial).</li>
+        <li><span class="hl">WPA3:</span> 128/192 bits + SAE. Substitueix PSK per autenticació simultània d'iguals.</li>
+        <li><span class="hl">WPS:</span> facilita connexió de nous dispositius. PERILL: el PIN de 8 dígits és vulnerable. Desactivar WPS.</li>
+      </ul>
+    </div>
+  `;
+}
+
+// ==================== INIT ====================
+document.addEventListener('DOMContentLoaded', () => {
+  loadExamen();
+  loadQuiz();
+  loadFlashcards();
+});
+</script>
+</body>
+</html>
